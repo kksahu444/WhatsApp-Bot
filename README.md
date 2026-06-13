@@ -281,7 +281,7 @@ GOOGLE_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
 
 | Document                                         | Description                           |
 | ------------------------------------------------ | ------------------------------------- |
-| [ARCHITECTURE.md](ARCHITECTURE.md)               | Deep-dive into technical decisions    |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md)               | Deep-dive into technical decisions    |
 | [API.md](API.md)                                 | Webhook & internal API reference      |
 | [SECURITY.md](SECURITY.md)                       | Security considerations & limitations |
 | [docs/deployment.md](docs/deployment.md)         | AWS EC2 deployment guide              |
