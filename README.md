@@ -377,6 +377,14 @@ ngrok http 8000
 
 ---
 
+## 👤 Author
+
+**Krishnkant Sahu**
+- **Email:** [krishnkantsahu102@gmail.com](mailto:krishnkantsahu102@gmail.com)
+- **GitHub:** [@kksahu444](https://github.com/kksahu444)
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
