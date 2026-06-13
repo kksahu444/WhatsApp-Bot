@@ -366,7 +366,7 @@ If you suspect a security breach:
 
 ## Contact
 
-For security concerns, please open a **private** security advisory or contact the maintainers directly.
+For security concerns, please open a **private** security advisory or contact krishnkantsahu102@gmail.com directly.
 
 ---
 
