@@ -1,0 +1,8 @@
+# Session storage directory
+# WhatsApp Web.js session data will be stored here.
+# This directory should not be committed to version control.
+# 
+# Files generated:
+# - session-whatsapp.json (authentication data)
+# - LocalStorage/ (browser local storage)
+# - Cookies (browser cookies)

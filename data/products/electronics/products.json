@@ -1,0 +1,52 @@
+[
+  {
+    "sku": "ELEC-001",
+    "name": "Headphone Premium Wireless",
+    "description": "Headphone nirkabel premium dengan noise cancellation aktif, baterai 30 jam, dan kualitas suara Hi-Fi",
+    "price": 450000,
+    "category": "Electronics",
+    "stock_quantity": 25,
+    "image_url": "https://example.com/images/headphone-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "ELEC-002",
+    "name": "Mouse Gaming RGB",
+    "description": "Mouse gaming dengan sensor 16000 DPI, 7 tombol programmable, dan lampu RGB",
+    "price": 250000,
+    "category": "Electronics",
+    "stock_quantity": 50,
+    "image_url": "https://example.com/images/mouse-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "ELEC-003",
+    "name": "USB-C Hub 7-in-1",
+    "description": "Hub USB-C dengan HDMI 4K, 3 USB-A, USB-C, SD card reader, dan ethernet port",
+    "price": 350000,
+    "category": "Electronics",
+    "stock_quantity": 30,
+    "image_url": "https://example.com/images/hub-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "ELEC-004",
+    "name": "Keyboard Mechanical TKL",
+    "description": "Keyboard mechanical tenkeyless dengan switch Cherry MX Brown, PBT keycaps, dan hot-swap",
+    "price": 550000,
+    "category": "Electronics",
+    "stock_quantity": 20,
+    "image_url": "https://example.com/images/keyboard-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "ELEC-005",
+    "name": "Webcam Full HD 1080p",
+    "description": "Webcam 1080p dengan autofocus, mikrofon stereo built-in, dan privacy cover",
+    "price": 300000,
+    "category": "Electronics",
+    "stock_quantity": 35,
+    "image_url": "https://example.com/images/webcam-001.jpg",
+    "is_active": true
+  }
+]

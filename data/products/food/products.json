@@ -1,0 +1,77 @@
+[
+  {
+    "sku": "FOOD-001",
+    "name": "Kopi Arabika Gayo 500g",
+    "description": "Kopi Arabika Gayo Aceh premium, roast level medium, notes: fruity, chocolate, wine",
+    "price": 95000,
+    "category": "Food",
+    "stock_quantity": 80,
+    "image_url": "https://example.com/images/kopi-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "weight": "500g",
+      "expiry_months": 12,
+      "roast_level": "Medium"
+    }
+  },
+  {
+    "sku": "FOOD-002",
+    "name": "Madu Hutan Asli 650ml",
+    "description": "Madu hutan asli murni dari Kalimantan, tanpa campuran, rasa khas dan kental",
+    "price": 125000,
+    "category": "Food",
+    "stock_quantity": 45,
+    "image_url": "https://example.com/images/madu-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "volume": "650ml",
+      "expiry_months": 24,
+      "origin": "Kalimantan"
+    }
+  },
+  {
+    "sku": "FOOD-003",
+    "name": "Sambal Ijo Premium 250g",
+    "description": "Sambal ijo homemade dengan cabe rawit hijau, bawang, dan terasi pilihan",
+    "price": 35000,
+    "category": "Food",
+    "stock_quantity": 100,
+    "image_url": "https://example.com/images/sambal-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "weight": "250g",
+      "expiry_months": 3,
+      "spicy_level": "Medium"
+    }
+  },
+  {
+    "sku": "FOOD-004",
+    "name": "Keripik Singkong Pedas 500g",
+    "description": "Keripik singkong renyah dengan bumbu pedas khas, tanpa pengawet",
+    "price": 28000,
+    "category": "Food",
+    "stock_quantity": 150,
+    "image_url": "https://example.com/images/keripik-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "weight": "500g",
+      "expiry_months": 6,
+      "spicy_level": "Hot"
+    }
+  },
+  {
+    "sku": "FOOD-005",
+    "name": "Granola Mix Premium 400g",
+    "description": "Granola mix dengan oat, almond, cranberry, chia seed, dan madu alami",
+    "price": 75000,
+    "category": "Food",
+    "stock_quantity": 60,
+    "image_url": "https://example.com/images/granola-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "weight": "400g",
+      "expiry_months": 6,
+      "calories_per_serving": 180
+    }
+  }
+]

@@ -1,0 +1,222 @@
+version: "3.8"
+
+services:
+  # ============================================================================
+  # REDIS
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: whatsapp-redis
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'if [ -n "${REDIS_PASSWORD}" ]; then redis-cli -a "${REDIS_PASSWORD}" ping || exit 1; else redis-cli ping || exit 1; fi',
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    mem_limit: 256m
+    networks:
+      - whatsapp-network
+
+  # ============================================================================
+  # BACKEND – FastAPI + RAG (Brain)
+  # ============================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whatsapp-backend
+    command:
+      [
+        "/wait-for.sh",
+        "redis",
+        "6379",
+        "60",
+        "--",
+        "uvicorn",
+        "backend.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--workers",
+        "1",
+      ]
+    expose:
+      - "8000"
+    volumes:
+      - lancedb_data:/app/data/lancedb
+      - logs_data:/app/logs
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - LANCEDB_PATH=/app/data/lancedb
+      - LOG_DIR=/app/logs
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD-SHELL", "python /app/backend/healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    mem_limit: 1024m
+    networks:
+      - whatsapp-network
+
+  # ============================================================================
+  # DASHBOARD – Streamlit Admin Panel
+  # ============================================================================
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: whatsapp-dashboard
+    command:
+      [
+        "streamlit",
+        "run",
+        "app.py",
+        "--server.address",
+        "0.0.0.0",
+        "--server.port",
+        "8501",
+        "--server.enableCORS",
+        "false",
+      ]
+    expose:
+      - "8501"
+    volumes:
+      - lancedb_data:/app/data/lancedb:ro
+    env_file:
+      - .env
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - LANCEDB_PATH=/app/data/lancedb
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - backend
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+      - whatsapp-network
+
+  # ============================================================================
+  # WORKER – Cart Recovery / Scheduled Jobs
+  # ============================================================================
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: whatsapp-worker
+    command:
+      [
+        "/wait-for.sh",
+        "redis",
+        "6379",
+        "60",
+        "--",
+        "python",
+        "/app/backend/scripts/check_abandoned_carts.py",
+        "--loop",
+      ]
+    volumes:
+      - lancedb_data:/app/data/lancedb
+      - logs_data:/app/logs
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - LANCEDB_PATH=/app/data/lancedb
+      - LOG_DIR=/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    mem_limit: 256m
+    networks:
+      - whatsapp-network
+
+  # ============================================================================
+  # BOT – WhatsApp Web.js Client
+  # ============================================================================
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    container_name: whatsapp-bot
+    volumes:
+      - wwebjs_auth:/app/.wwebjs_auth
+    env_file:
+      - .env
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+      - whatsapp-network
+
+  # ============================================================================
+  # CADDY – Production Reverse Proxy (Optional Profile)
+  # ============================================================================
+  caddy:
+    image: caddy:2-alpine
+    container_name: whatsapp-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - dashboard
+    restart: unless-stopped
+    mem_limit: 128m
+    networks:
+      - whatsapp-network
+    profiles:
+      - production
+
+# ============================================================================
+# VOLUMES
+# ============================================================================
+volumes:
+  redis_data:
+  lancedb_data:
+  logs_data:
+  wwebjs_auth:
+  caddy_data:
+  caddy_config:
+
+# ============================================================================
+# NETWORK
+# ============================================================================
+networks:
+  whatsapp-network:
+    driver: bridge

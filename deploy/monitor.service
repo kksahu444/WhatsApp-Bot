@@ -1,0 +1,27 @@
+[Unit]
+Description=WhatsApp Bot Health Monitor
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/WhatsApp-Bot
+ExecStart=/home/ec2-user/WhatsApp-Bot/scripts/monitor.sh
+ExecStop=/bin/kill -SIGTERM $MAINPID
+Restart=always
+RestartSec=10
+
+# Environment
+Environment=HEALTH_URL=http://localhost:8000/health
+Environment=CHECK_INTERVAL=60
+Environment=MAX_FAILURES=3
+Environment=APP_SERVICE_NAME=backend
+
+# Logging
+StandardOutput=append:/home/ec2-user/WhatsApp-Bot/logs/monitor.log
+StandardError=append:/home/ec2-user/WhatsApp-Bot/logs/monitor.log
+
+[Install]
+WantedBy=multi-user.target

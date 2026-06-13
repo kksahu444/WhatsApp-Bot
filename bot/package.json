@@ -1,0 +1,40 @@
+{
+  "name": "whatsapp-seller-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp bot for seller interactions",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "eslint src/",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "qrcode-terminal": "^0.12.0",
+    "redis": "^4.6.12",
+    "whatsapp-web.js": "^1.23.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "seller",
+    "e-commerce"
+  ],
+  "author": "Krishnkant Sahu",
+  "license": "MIT"
+}

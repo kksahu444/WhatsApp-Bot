@@ -1,0 +1,65 @@
+# Caddyfile - Reverse Proxy Configuration
+# Production configuration for WhatsApp Seller Bot
+
+{
+    # Global options
+    email admin@example.com
+    
+    # Enable automatic HTTPS
+    # auto_https on
+}
+
+# Main domain
+yourdomain.com {
+    # Backend API
+    handle /api/* {
+        reverse_proxy backend:8000
+    }
+    
+    # Dashboard
+    handle /dashboard/* {
+        uri strip_prefix /dashboard
+        reverse_proxy dashboard:8501
+    }
+    
+    # Bot webhook (for Meta Cloud API)
+    handle /webhook/* {
+        reverse_proxy bot:3000
+    }
+    
+    # Health checks
+    handle /health {
+        respond "OK" 200
+    }
+    
+    # Default - serve dashboard
+    handle {
+        reverse_proxy dashboard:8501
+    }
+    
+    # Logging
+    log {
+        output file /var/log/caddy/access.log
+        format json
+    }
+    
+    # Headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+}
+
+# API subdomain (optional)
+api.yourdomain.com {
+    reverse_proxy backend:8000
+    
+    header {
+        Access-Control-Allow-Origin *
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization, X-API-Key"
+    }
+}

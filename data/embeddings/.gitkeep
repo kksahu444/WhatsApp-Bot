@@ -1,0 +1,10 @@
+# This file is a placeholder for the embeddings index directory.
+# LanceDB will create the actual index files here when products are ingested.
+# 
+# Structure after ingestion:
+# embeddings/
+# ├── products.lance/
+# │   ├── _latest
+# │   ├── _versions/
+# │   └── *.lance
+# └── .gitkeep

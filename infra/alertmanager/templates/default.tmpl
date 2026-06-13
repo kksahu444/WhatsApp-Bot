@@ -1,0 +1,83 @@
+{{ define "slack.default.title" }}
+[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+{{ end }}
+
+{{ define "slack.default.text" }}
+{{ range .Alerts }}
+*Alert:* {{ .Annotations.summary }}
+*Description:* {{ .Annotations.description }}
+*Severity:* {{ .Labels.severity }}
+*Service:* {{ .Labels.service }}
+*Started:* {{ .StartsAt | date "2006-01-02 15:04:05 MST" }}
+{{ if .Annotations.runbook_url }}*Runbook:* {{ .Annotations.runbook_url }}{{ end }}
+---
+{{ end }}
+{{ end }}
+
+{{ define "email.default.subject" }}
+[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }} - {{ .CommonLabels.service }}
+{{ end }}
+
+{{ define "email.default.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { 
+            padding: 15px; 
+            border-radius: 5px; 
+            margin-bottom: 20px;
+        }
+        .firing { background-color: #ff4444; color: white; }
+        .resolved { background-color: #00C851; color: white; }
+        .alert-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .critical { border-left: 4px solid #ff4444; }
+        .warning { border-left: 4px solid #ffbb33; }
+        .label { font-weight: bold; color: #666; }
+        .value { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header {{ .Status }}">
+        <h2>{{ .Status | toUpper }}: {{ .CommonLabels.alertname }}</h2>
+        <p>Service: {{ .CommonLabels.service }}</p>
+    </div>
+    
+    {{ range .Alerts }}
+    <div class="alert-box {{ .Labels.severity }}">
+        <div class="value">
+            <span class="label">Summary:</span><br>
+            {{ .Annotations.summary }}
+        </div>
+        <div class="value">
+            <span class="label">Description:</span><br>
+            {{ .Annotations.description }}
+        </div>
+        <div class="value">
+            <span class="label">Severity:</span> {{ .Labels.severity }}
+        </div>
+        <div class="value">
+            <span class="label">Started:</span> {{ .StartsAt }}
+        </div>
+        {{ if .Annotations.runbook_url }}
+        <div class="value">
+            <span class="label">Runbook:</span> 
+            <a href="{{ .Annotations.runbook_url }}">{{ .Annotations.runbook_url }}</a>
+        </div>
+        {{ end }}
+    </div>
+    {{ end }}
+    
+    <hr>
+    <p style="color: #999; font-size: 12px;">
+        This alert was sent by WhatsApp Bot Alertmanager
+    </p>
+</body>
+</html>
+{{ end }}

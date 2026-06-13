@@ -1,0 +1,125 @@
+# Docker Compose for WhatsApp Bot Production
+# No 'version' key - uses modern Compose Specification
+
+services:
+  ###########################################
+  # Caddy - Reverse Proxy with Auto HTTPS
+  ###########################################
+  caddy:
+    image: caddy:alpine
+    container_name: whatsapp-bot-caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      - /home/ec2-user/whatsapp-bot/caddy-data:/var/log/caddy
+    depends_on:
+      - app
+    networks:
+      - whatsapp-net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:80",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  ###########################################
+  # FastAPI Application
+  ###########################################
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whatsapp-bot-app
+    restart: always
+    expose:
+      - "8000"
+    environment:
+      - ENVIRONMENT=production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    env_file:
+      - .env
+    volumes:
+      - /home/ec2-user/whatsapp-bot/data:/app/data
+      # Google Sheets service account credentials (read-only)
+      - /home/ec2-user/whatsapp-bot/service_account.json:/app/service_account.json:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - whatsapp-net
+    # CRITICAL: Memory limit to prevent OOM on t2.micro
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+        reservations:
+          memory: 300M
+    # Fallback for older Docker versions
+    mem_limit: 600m
+    memswap_limit: 1200m
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  ###########################################
+  # Redis - Session & Cache Store
+  ###########################################
+  redis:
+    image: redis:7-alpine
+    container_name: whatsapp-bot-redis
+    restart: always
+    # Memory-efficient config for t2.micro
+    command: >
+      redis-server
+      --maxmemory 100mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+      --appendfsync everysec
+    volumes:
+      - /home/ec2-user/whatsapp-bot/redis-data:/data
+    networks:
+      - whatsapp-net
+    # CRITICAL: Memory limit for Redis
+    deploy:
+      resources:
+        limits:
+          memory: 150M
+        reservations:
+          memory: 50M
+    mem_limit: 150m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+###########################################
+# Networks
+###########################################
+networks:
+  whatsapp-net:
+    driver: bridge
+
+###########################################
+# Volumes
+###########################################
+volumes:
+  caddy_data:
+  caddy_config:

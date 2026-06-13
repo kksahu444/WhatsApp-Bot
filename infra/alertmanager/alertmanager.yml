@@ -1,0 +1,139 @@
+# Alertmanager configuration
+# Handles routing and notification of Prometheus alerts
+
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: '${SMTP_HOST}:${SMTP_PORT}'
+  smtp_from: '${ALERT_EMAIL_FROM}'
+  smtp_auth_username: '${SMTP_USERNAME}'
+  smtp_auth_password: '${SMTP_PASSWORD}'
+  slack_api_url: '${SLACK_WEBHOOK_URL}'
+
+# Route tree
+route:
+  group_by: ['alertname', 'severity', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'default-receiver'
+  
+  routes:
+    # Critical alerts - immediate notification
+    - match:
+        severity: critical
+      receiver: 'critical-receiver'
+      group_wait: 10s
+      repeat_interval: 1h
+      continue: true
+    
+    # Warning alerts
+    - match:
+        severity: warning
+      receiver: 'warning-receiver'
+      group_wait: 1m
+      repeat_interval: 4h
+    
+    # Business alerts
+    - match:
+        type: business
+      receiver: 'business-receiver'
+      group_wait: 5m
+      repeat_interval: 12h
+    
+    # Infrastructure alerts
+    - match:
+        service: infrastructure
+      receiver: 'infra-receiver'
+      group_wait: 2m
+      repeat_interval: 6h
+
+# Receivers
+receivers:
+  - name: 'default-receiver'
+    slack_configs:
+      - channel: '#whatsapp-bot-alerts'
+        send_resolved: true
+        title: '{{ template "slack.default.title" . }}'
+        text: '{{ template "slack.default.text" . }}'
+        color: '{{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}danger{{ else }}warning{{ end }}{{ else }}good{{ end }}'
+
+  - name: 'critical-receiver'
+    slack_configs:
+      - channel: '#whatsapp-bot-critical'
+        send_resolved: true
+        title: '🚨 CRITICAL: {{ .CommonLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Service:* {{ .Labels.service }}
+          *Started:* {{ .StartsAt | date "2006-01-02 15:04:05" }}
+          {{ if .Annotations.runbook_url }}*Runbook:* {{ .Annotations.runbook_url }}{{ end }}
+          {{ end }}
+        color: 'danger'
+    email_configs:
+      - to: '${CRITICAL_ALERT_EMAIL}'
+        send_resolved: true
+        html: |
+          <h2>🚨 Critical Alert: {{ .CommonLabels.alertname }}</h2>
+          {{ range .Alerts }}
+          <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
+          <p><strong>Service:</strong> {{ .Labels.service }}</p>
+          <p><strong>Started:</strong> {{ .StartsAt }}</p>
+          {{ end }}
+
+  - name: 'warning-receiver'
+    slack_configs:
+      - channel: '#whatsapp-bot-alerts'
+        send_resolved: true
+        title: '⚠️ Warning: {{ .CommonLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+        color: 'warning'
+
+  - name: 'business-receiver'
+    slack_configs:
+      - channel: '#whatsapp-bot-business'
+        send_resolved: true
+        title: '📊 Business Alert: {{ .CommonLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+        color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
+
+  - name: 'infra-receiver'
+    slack_configs:
+      - channel: '#infrastructure'
+        send_resolved: true
+        title: '🔧 Infrastructure: {{ .CommonLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+
+# Inhibition rules
+inhibit_rules:
+  # If a critical alert fires, suppress warnings for the same service
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service']
+  
+  # If the service is down, suppress all other alerts for that service
+  - source_match:
+      alertname: 'ServiceDown'
+    target_match_re:
+      alertname: '.+'
+    equal: ['service']
+
+# Templates
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'

@@ -1,0 +1,52 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Development
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Tests
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment files (use docker secrets instead)
+.env
+.env.*
+!.env.example
+
+# Local data
+data/backups/
+*.log
+
+# Node specific
+bot/node_modules/
+bot/.wwebjs_auth/
+bot/.wwebjs_cache/
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Scripts not needed in container
+scripts/
+ops/
+infra/
+.github/

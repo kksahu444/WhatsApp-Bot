@@ -1,0 +1,62 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Backend: FastAPI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "main:app",
+                "--reload",
+                "--port",
+                "8000"
+            ],
+            "cwd": "${workspaceFolder}/backend",
+            "envFile": "${workspaceFolder}/backend/.env",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Bot: Node.js",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/bot/src/index.js",
+            "cwd": "${workspaceFolder}/bot",
+            "envFile": "${workspaceFolder}/bot/.env",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Dashboard: Streamlit",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "streamlit",
+            "args": [
+                "run",
+                "app.py"
+            ],
+            "cwd": "${workspaceFolder}/dashboard",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Tests: Backend",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "tests/",
+                "-v"
+            ],
+            "cwd": "${workspaceFolder}/backend",
+            "console": "integratedTerminal"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack",
+            "configurations": [
+                "Backend: FastAPI",
+                "Bot: Node.js"
+            ]
+        }
+    ]
+}

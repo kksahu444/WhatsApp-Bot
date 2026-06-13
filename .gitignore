@@ -1,0 +1,89 @@
+# Dependencies
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# WhatsApp Session
+bot/.wwebjs_auth/
+bot/.wwebjs_cache/
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Local data
+data/lancedb/
+data/backups/*.tar.gz
+*.lance
+
+# Logs
+logs/
+!logs/.gitkeep
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backups
+backups/
+!backups/.gitkeep
+*.sql.gz
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+
+# Docker
+.docker/
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Secrets
+*.pem
+*.key
+secrets/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary files
+tmp/
+temp/
+*.bak

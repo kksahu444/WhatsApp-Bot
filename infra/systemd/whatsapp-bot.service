@@ -1,0 +1,27 @@
+[Unit]
+Description=WhatsApp Seller Bot Backend
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=whatsapp-bot
+WorkingDirectory=/opt/whatsapp-seller-bot
+ExecStart=/usr/bin/docker compose up
+ExecStop=/usr/bin/docker compose down
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=whatsapp-bot
+
+# Security
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/whatsapp-seller-bot
+
+[Install]
+WantedBy=multi-user.target

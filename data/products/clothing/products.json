@@ -1,0 +1,72 @@
+[
+  {
+    "sku": "CLTH-001",
+    "name": "Kaos Polos Premium Cotton",
+    "description": "Kaos polos 100% cotton combed 30s, nyaman dan adem untuk sehari-hari",
+    "price": 85000,
+    "category": "Clothing",
+    "stock_quantity": 100,
+    "image_url": "https://example.com/images/kaos-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "sizes": ["S", "M", "L", "XL"],
+      "colors": ["Hitam", "Putih", "Navy", "Abu-abu"]
+    }
+  },
+  {
+    "sku": "CLTH-002",
+    "name": "Celana Jeans Slim Fit",
+    "description": "Celana jeans slim fit dengan bahan stretch yang nyaman dan elastis",
+    "price": 250000,
+    "category": "Clothing",
+    "stock_quantity": 60,
+    "image_url": "https://example.com/images/jeans-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "sizes": ["28", "29", "30", "31", "32", "33", "34"],
+      "colors": ["Blue Wash", "Black", "Dark Blue"]
+    }
+  },
+  {
+    "sku": "CLTH-003",
+    "name": "Sepatu Sneakers Casual",
+    "description": "Sepatu sneakers casual dengan sol ringan dan desain minimalis",
+    "price": 380000,
+    "category": "Clothing",
+    "stock_quantity": 45,
+    "image_url": "https://example.com/images/sneakers-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "sizes": ["39", "40", "41", "42", "43", "44"],
+      "colors": ["Putih", "Hitam", "Navy"]
+    }
+  },
+  {
+    "sku": "CLTH-004",
+    "name": "Hoodie Fleece Unisex",
+    "description": "Hoodie fleece tebal dengan kangaroo pocket, cocok untuk musim hujan",
+    "price": 175000,
+    "category": "Clothing",
+    "stock_quantity": 80,
+    "image_url": "https://example.com/images/hoodie-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "sizes": ["S", "M", "L", "XL", "XXL"],
+      "colors": ["Hitam", "Abu-abu", "Navy", "Maroon"]
+    }
+  },
+  {
+    "sku": "CLTH-005",
+    "name": "Kemeja Flanel Kotak",
+    "description": "Kemeja flanel kotak-kotak dengan bahan katun yang lembut dan hangat",
+    "price": 145000,
+    "category": "Clothing",
+    "stock_quantity": 55,
+    "image_url": "https://example.com/images/flanel-001.jpg",
+    "is_active": true,
+    "metadata": {
+      "sizes": ["S", "M", "L", "XL"],
+      "colors": ["Merah-Hitam", "Biru-Hitam", "Hijau-Hitam"]
+    }
+  }
+]

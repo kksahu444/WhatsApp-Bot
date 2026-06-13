@@ -1,0 +1,52 @@
+[
+  {
+    "sku": "HOME-001",
+    "name": "Laptop Stand Aluminium",
+    "description": "Stand laptop aluminium dengan pengaturan ketinggian, mendukung laptop hingga 17 inch",
+    "price": 195000,
+    "category": "Home",
+    "stock_quantity": 40,
+    "image_url": "https://example.com/images/stand-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "HOME-002",
+    "name": "Desk Lamp LED Dimmable",
+    "description": "Lampu meja LED dengan 5 level brightness dan 3 mode warna, USB charging port",
+    "price": 125000,
+    "category": "Home",
+    "stock_quantity": 65,
+    "image_url": "https://example.com/images/lamp-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "HOME-003",
+    "name": "Monitor Riser dengan Drawer",
+    "description": "Monitor riser kayu dengan laci penyimpanan, mendukung monitor hingga 27 inch",
+    "price": 165000,
+    "category": "Home",
+    "stock_quantity": 35,
+    "image_url": "https://example.com/images/riser-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "HOME-004",
+    "name": "Desk Organizer Set",
+    "description": "Set organizer meja 5 piece: pen holder, card holder, memo holder, paper tray, phone stand",
+    "price": 85000,
+    "category": "Home",
+    "stock_quantity": 90,
+    "image_url": "https://example.com/images/organizer-001.jpg",
+    "is_active": true
+  },
+  {
+    "sku": "HOME-005",
+    "name": "Mousepad XL Gaming",
+    "description": "Mousepad extended size 80x30cm dengan jahitan pinggir, anti-slip base",
+    "price": 75000,
+    "category": "Home",
+    "stock_quantity": 120,
+    "image_url": "https://example.com/images/mousepad-001.jpg",
+    "is_active": true
+  }
+]
